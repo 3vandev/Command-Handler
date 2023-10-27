@@ -1,0 +1,40 @@
+{
+  "format_version": 2,
+  "metadata": {
+    "authors": ["evn.dev on discord", "Pixelite Team"],
+    "generated_with": {
+      "blockbench_block_wizard": ["1.2.1"]
+    }
+  },
+  "header": {
+    "name": "Pixelite Command Handler",
+    "description": "Command Handler for Pixelite",
+    "min_engine_version": [1, 20, 0],
+    "uuid": "2ae2a8bd-e97d-4bab-8314-df526cc5b79f",
+    "version": [1, 0, 0]
+  },
+  "modules": [
+    {
+      "type": "data",
+      "uuid": "1026b9e2-434d-475b-a2a7-5f97b8a59f6c",
+      "version": [1, 0, 0]
+    },
+    {
+      "type": "script",
+      "language": "javascript",
+      "uuid": "be224dae-d028-43dc-9a3d-5c5e1eb56040",
+      "entry": "scripts/main.js",
+      "version": [1, 0, 0]
+    }
+  ],
+  "dependencies": [
+    {
+      "module_name": "@minecraft/server",
+      "version": "1.7.0-beta"
+    },
+    {
+      "module_name": "@minecraft/server-ui",
+      "version": "1.2.0-beta"
+    }
+  ]
+}
