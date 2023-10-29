@@ -40,16 +40,12 @@ export const commands = [
     }
   }),
 
-  new command("version", "The pack version", (args, player) => {
-    console.log("version");
-  }),
-
   new command(
-    "duel",
-    "Send a duel request to a player",
+    "say",
+    "Set your display name",
     (args, player) => {
-      world.sendMessage(`Send a duel request to ${args[0]}`);
+      world.sendMessage(`§a${player.name} §l§2>>§r ${args[0]}`);
     },
-    [new arg("player", "The player to duel", "required")]
+    [new arg("message", "Your display name", "required")]
   ),
 ];

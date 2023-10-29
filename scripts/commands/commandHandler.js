@@ -6,7 +6,11 @@ world.beforeEvents.chatSend.subscribe((data) => {
   const { message, sender: player } = data;
   data.cancel = true;
   if (message.startsWith(prefix)) {
-    const args = message.slice(prefix.length).trim().split(/ +/);
+    const args = message
+      .slice(prefix.length)
+      .trim()
+      .match(/(?:[^\s"]+|"[^"]*")+/g)
+      .map((arg) => arg.replace(/"/g, ""));
     const commandName = args.shift().toLowerCase();
     for (const cmd of commands) {
       if (cmd.name === commandName) {
