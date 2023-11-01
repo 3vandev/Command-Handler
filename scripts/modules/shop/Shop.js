@@ -1,5 +1,8 @@
 import { world, system } from "@minecraft/server";
-import { ActionFormData } from "@minecraft/server-ui";
+import { ActionFormData, FormCancelationReason } from "@minecraft/server-ui";
+import { SS } from "../../utils/SS";
+import { a } from "../../database/playerRank"
+import { c } from "../../database/playerMoney"
 
 class Shop {
     constructor(name, items) {
@@ -7,17 +10,22 @@ class Shop {
         this.items = items;
 
         this.menu = new ActionFormData()
-        .title("§c" + this.name)
-        .body("§aWelcome to the shop!");
+        .title(SS("b",this.name))
         for (const item of this.items) {
-            this.menu.button("§a" + item.name + " §7- §a" + item.price + " coins");
+            this.menu.button(`${SS('8', item.name)}\n${SS('6', item.price + "g")}`);
         }
     }
-
     open(player) {
-        this.menu.show(player).then((data) => {
-            this.items[data.selection].buy(player);
-        });
+        system.runTimeout(() => {
+            this.menu.body(SS("a",`Welcome to the shop!\nYou have ${SS("6", c.get(player.name).money + "g")}`))
+            this.menu.show(player).then((data) => {
+                if(parseFloat(c.get(player.name).money) >= this.items[data.selection].price) {
+                    player.sendMessage("§aYou bought a " + this.items[data.selection].name + "!");
+                    this.items[data.selection].onBuy(player);
+                    c.set(player.name, { money: parseFloat(c.get(player.name).money) - this.items[data.selection].price });
+                }
+            });
+        }, 20 * 3);
     }
 }
 
@@ -27,26 +35,31 @@ class shopItem {
         this.price = price;
         this.onBuy = onBuy;
     }
-
-    buy(player) {
-        this.onBuy(player);
-    }
 }
 
-
-/*
-world.afterEvents.itemUse.subscribe((data) => {
-    if(data.itemStack.typeId === "minecraft:nether_star") {
-        testMenu(data.source);
-    }
-});
-
-export function testMenu(player) {
-    new ActionFormData()
-    .title("§cTest Menu")
-    .body("§aThis is a test menu")
-    .button("§aClick me!")
-    .show(player).then((data) => {
-    });
-}
-*/
+export const shop = new Shop("Rank Shop", [
+    new shopItem("Garnet", 100, (player) => {
+        a.set(player.name, { rank: "garnet" });
+    }),
+    new shopItem("Amethyst", 200, (player) => {
+        a.set(player.name, { rank: "amethyst" });
+    }),
+    new shopItem("Topaz", 300, (player) => {
+        a.set(player.name, { rank: "topaz" });
+    }),
+    new shopItem("Sapphire", 400, (player) => {
+        a.set(player.name, { rank: "sapphire" });
+    }),
+    new shopItem("Emerald", 500, (player) => {
+        a.set(player.name, { rank: "emerald" });
+    }),
+    new shopItem("Ruby", 600, (player) => {
+        a.set(player.name, { rank: "ruby" });
+    }),
+    new shopItem("Diamond", 700, (player) => {
+        a.set(player.name, { rank: "diamond" });
+    }),
+    new shopItem("Obsidian", 800, (player) => {
+        a.set(player.name, { rank: "obsidian" });
+    }),
+]);

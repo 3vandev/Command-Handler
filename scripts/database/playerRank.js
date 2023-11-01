@@ -12,6 +12,6 @@ for (const player of world.getPlayers()) {
     a.set(player.name, { rank: "member" });
 }
 
-export function setRank(player, rankz) {
-    a.set(player.name, { rank: rankz})
+export function setRank(player, rank) {
+    a.set(player.name, { rank: rank})
 }

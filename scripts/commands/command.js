@@ -1,6 +1,8 @@
-import { world, system } from "@minecraft/server";
+import { world, system, PlayerBreakBlockBeforeEventSignal } from "@minecraft/server";
 import { prefix } from "./config.js";
-import { a, setRank } from "../database/playerRank.js";
+import { setRank } from "../database/playerRank.js";
+import { setMoney } from "../database/playerMoney.js";
+import { shop } from "../modules/shop/Shop.js";
 
 export class command {
   constructor(name, info, callback, args = []) {
@@ -53,5 +55,26 @@ export const commands = [
       new arg("player", "The player to set the rank of", "required"),
       new arg("rank", "The rank to set the player to", "required"),
     ]
+  ),
+
+  new command(
+    "setcoins",
+    "Sets a player's balance",
+    (args, player) => {
+        const target = world.getPlayers().find((p) => p.name === args[0]);
+        system.runTimeout(() => {setMoney(target, args[1])}, 1);
+    },
+    [
+      new arg("player", "The player to set the rank of", "required"),
+      new arg("rank", "The rank to set the player to", "required"),
+    ]
+  ),
+
+  new command(
+    "shop",
+    "Opens the shop",
+    (args, player) => {
+      system.runTimeout(() => {shop.open(player)}, 1);
+    },
   ),
 ];

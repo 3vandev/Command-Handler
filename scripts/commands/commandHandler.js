@@ -21,6 +21,6 @@ world.beforeEvents.chatSend.subscribe((data) => {
     }
     world.sendMessage(`§cUnknown command: ${commandName}`);
   } else {
-    world.sendMessage(`§7[§c${a.get(player.name).rank}§r§7] ${player.name} §l>§r ${message}`);
+    world.sendMessage(`§7[§c${a.get(player.name).rank.toUpperCase()}§r§7] ${player.name} §l>§r ${message}`);
   }
 });

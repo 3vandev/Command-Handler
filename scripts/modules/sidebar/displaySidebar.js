@@ -2,6 +2,9 @@ import { addTick } from "../tick";
 import { world, system } from "@minecraft/server";
 import * as sidebar from "./sidebar";
 import { SS } from "../../utils/SS";
+import { a } from "../../database/playerRank"
+import { c } from "../../database/playerMoney"
+
 
 const nameDisplay = [
     "§l§fEVANS KITPVP§r", "§l§fEVANS KITPVP§r", "§l§fEVANS KITPVP§r", "§l§fEVANS KITPVP§r", "§l§fEVANS KITPVP§r", "§l§fEVANS KITPVP§r", "§l§fEVANS KITPVP§r", "§l§fEVANS KITPVP§r", "§l§fEVANS KITPVP§r", "§l§fEVANS KITPVP§r",
@@ -21,7 +24,8 @@ system.runInterval(() => {
             displayIndex++;
         const bar = new sidebar.sidebar(nameDisplay[displayIndex], [
             new sidebar.row(SS("0", "0/0/0 u/euna")),
-            new sidebar.row(`${SS("7", "Players:")} ${SS("2", world.getPlayers().length.toString())}`, 1),
+            new sidebar.row(`${SS("7", "Rank:")} ${SS("2", a.get(player.name).rank).toUpperCase()}`, 1),
+            new sidebar.row(`${SS("7", "Money:")} ${SS("6", c.get(player.name).money + "g")}`),
             new sidebar.row(`${SS("e", "www.pixelite.club")}`,1),
         ]);
         bar.display(player);
