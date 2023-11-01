@@ -1,6 +1,7 @@
 import { world } from "@minecraft/server";
 import { command, commands } from "./command.js";
 import { prefix } from "./config.js";
+import { a } from "../database/playerRank.js";
 
 world.beforeEvents.chatSend.subscribe((data) => {
   const { message, sender: player } = data;
@@ -20,6 +21,6 @@ world.beforeEvents.chatSend.subscribe((data) => {
     }
     world.sendMessage(`§cUnknown command: ${commandName}`);
   } else {
-    world.sendMessage(`§c${player.name} §l§2>>§r ${message}`);
+    world.sendMessage(`§7[§c${a.get(player.name).rank}§r§7] ${player.name} §l>§r ${message}`);
   }
 });

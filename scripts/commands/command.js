@@ -1,5 +1,6 @@
-import { world } from "@minecraft/server";
+import { world, system } from "@minecraft/server";
 import { prefix } from "./config.js";
+import { a, setRank } from "../database/playerRank.js";
 
 export class command {
   constructor(name, info, callback, args = []) {
@@ -11,10 +12,11 @@ export class command {
 }
 
 export class arg {
-  constructor(name, info, type) {
+  constructor(name, info, type, object = null) {
     this.name = name;
     this.info = info;
     this.type = type;
+    this.object = object;
   }
 }
 
@@ -27,9 +29,9 @@ export const commands = [
       if (cmd.args.length > 0) {
         for (const arg of cmd.args) {
           if (arg.type === "required") {
-            cmdStructure += ` <${arg.name}>`;
+            cmdStructure += ` <${arg.name}${arg.object != null ? ":" + arg.object : ""}>`;
           } else if (arg.type === "optional") {
-            cmdStructure += ` [${arg.name}]`;
+            cmdStructure += ` [${arg.name}${arg.object != null ? ":" + arg.object : ""}]`;
           }
         }
       }
@@ -41,11 +43,15 @@ export const commands = [
   }),
 
   new command(
-    "say",
-    "Set your display name",
+    "setrank",
+    "Sets a player's rank",
     (args, player) => {
-      world.sendMessage(`§a${player.name} §l§2>>§r ${args[0]}`);
+        const target = world.getPlayers().find((p) => p.name === args[0]);
+        system.runTimeout(() => {setRank(target, args[1])}, 1);
     },
-    [new arg("message", "Your display name", "required")]
+    [
+      new arg("player", "The player to set the rank of", "required"),
+      new arg("rank", "The rank to set the player to", "required"),
+    ]
   ),
 ];
