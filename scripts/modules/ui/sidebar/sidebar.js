@@ -1,5 +1,5 @@
 import { world } from "@minecraft/server";
-import { SS } from "../../utils/SS";
+import { SS } from "../../../utils/SS";
 
 let longest = 0;
 

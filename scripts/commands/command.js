@@ -48,8 +48,13 @@ export const commands = [
     "setrank",
     "Sets a player's rank",
     (args, player) => {
-        const target = world.getPlayers().find((p) => p.name === args[0]);
+        if(player.isOp()) {
+          const target = world.getPlayers().find((p) => p.name === args[0]);
         system.runTimeout(() => {setRank(target, args[1])}, 1);
+        }
+        else {
+          player.sendMessage("§cYou do not have permission to use this command!");
+        }
     },
     [
       new arg("player", "The player to set the rank of", "required"),
@@ -61,8 +66,13 @@ export const commands = [
     "setcoins",
     "Sets a player's balance",
     (args, player) => {
+      if(player.isOp()) {
         const target = world.getPlayers().find((p) => p.name === args[0]);
         system.runTimeout(() => {setMoney(target, args[1])}, 1);
+      }
+      else {
+        player.sendMessage("§cYou do not have permission to use this command!");
+      }
     },
     [
       new arg("player", "The player to set the rank of", "required"),
@@ -77,4 +87,22 @@ export const commands = [
       system.runTimeout(() => {shop.open(player)}, 1);
     },
   ),
+
+  new command(
+    "customitem",
+    "Gives a player a custom item",
+    (args, player) => {
+      if(player.isOp()) {
+        const target = world.getPlayers().find((p) => p.name === args[0]);
+        system.runTimeout(() => {target.giveItem(args[1])}, 1);
+      }
+      else {
+        player.sendMessage("§cYou do not have permission to use this command!");
+      }
+    },
+    [
+      new arg("player", "The player to give the item to", "required"),
+      new arg("item", "The item to give the player", "required"),
+    ]
+  )
 ];

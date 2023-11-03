@@ -1,4 +1,5 @@
-import { world,system } from "@minecraft/server";
+import { world, system } from "@minecraft/server";
+import { inCombatDatabase } from "../../database/playerInCombat";
 
 export class SafeZone {
     constructor(from, to, disableBuilding = false, command = () => {}, inZone = () => {}) {
@@ -20,14 +21,24 @@ export class SafeZone {
 }
 export const SafeZones = [
     new SafeZone(
-        [25, -64, 25], 
-        [-25, 255, -25], 
+        [597, 1, 123], 
+        [149, 255, -325], 
         true,
         () => {
-            world.sendMessage("§cYou can't build here!");
         },
+        (player) => {
+            if(inCombatDatabase.get(player.name).inCombat == true) return;
+            player.runCommand("effect @s instant_health 2 255 true");
+        }
+    ),
+
+    new SafeZone(
+        [383, 1, -111],
+        [363, 255, -91],
+        true,
+        () => {},
         (player) => {
             player.runCommand("effect @s instant_health 2 255 true");
         }
-)];
- 
+    )
+];
